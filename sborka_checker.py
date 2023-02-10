@@ -17,8 +17,10 @@ def main():
         elif int(ans) == 2:
             path = input('Укажите путь к тонким сборкам:\n')
             for dir in os.scandir(path):
-                if dir.is_dir():
+                if dir.is_dir() and re.findall(patterns.right_sborka_name_pattern, dir.name):
                     sborka_checker(dir.path)
+                elif dir.is_dir() and not re.findall(patterns.right_sborka_name_pattern, dir.name):
+                    print(f'Не понимаю имя сборки - {dir.name}')
 
         ans_1 = int(input('Желаете продолжить? [1 - Yes; 2 - No]:\n'))
         if int(ans_1) == 1:
@@ -68,7 +70,7 @@ def get_sborkas_density(sborkas_name: str) -> int:
     # sborkas_name - 12345_1000_64x90_200mat_11_01_2023_ArtStudija_name
     # sborkas_density - 200mat
 
-    sborka_density = re.findall(patterns.sborka_density, sborkas_name)[0][1]
+    sborka_density = re.findall(patterns.right_sborka_name_pattern, sborkas_name)[0][3]
     return int(sborka_density)
 
 
