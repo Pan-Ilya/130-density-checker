@@ -1,6 +1,3 @@
-# sborka_density = r'(?i)(?P<size>\d{2,}[xх]\d{2,}_)' \
-#                  r'(?P<density>\d+)'
-
 right_sborka_name_pattern = r'(?i)(?P<SborkaID>\d{5}).*?' \
                             r'(?P<quantity>\d{2,}).*?' \
                             r'(?P<size>\d{2,}[xх]\d{2,}).*?' \
