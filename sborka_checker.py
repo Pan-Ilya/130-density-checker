@@ -22,7 +22,6 @@ def main():
                     sborka_checker(dir.path)
                 elif dir.is_dir() and not re.findall(patterns.right_sborka_name_pattern, dir.name):
                     SborkaInfo.print_incorrect_name(dir.name)
-                    # print(f'Не понимаю имя сборки - {dir.name}\n')
 
         ans_1 = int(input('\nЖелаете продолжить? [1 - Yes; 2 - No]:\n'))
         if int(ans_1) == 1:
@@ -32,7 +31,6 @@ def main():
 
 
 def sborka_checker(path: str) -> None:
-    # path = input(f'{"*" * 55}\nУкажите путь к файлам тонкой сборки:\n')
     sborkas_name = path.split('\\')[-1]
     sborkas_density = get_sborkas_density(sborkas_name)
 
@@ -69,11 +67,6 @@ def sborka_checker(path: str) -> None:
                           raflatak_files=raflatak_files,
                           incorrect_files=incorrect_files)
 
-    # print(f'\nИмя сборки - {sborkas_name}')
-    # print(f'Плотность сборки - {sborkas_density} г/м2', end='\n\n')
-    #
-    # print_info(denser_files, incorrect_files, ofset_files, raflatak_files)
-
 
 def get_sborkas_density(sborkas_name: str) -> int:
     # sborkas_name - 12345_1000_64x90_200mat_11_01_2023_ArtStudija_name
@@ -103,7 +96,8 @@ def filename_is_denser(sborka_den: int, file_den: int) -> bool:
     # sborka_den = 128;  file_den = 130
     #  128 + 5 = 133
 
-    if file_den > sborka_den + 5:
+    density_diapason = 5
+    if file_den > sborka_den + density_diapason:
         return True
     return False
 
@@ -122,23 +116,6 @@ def filename_is_raflatak(sborkas_name: str, filename: str) -> bool:
     if 'raflatak' not in sborkas_name and 'raflatak' in filename:
         return True
     return False
-
-
-# def print_info(*args: list) -> None:
-#     phrases = [
-#         'Список более плотных макетов:',
-#         'Не могу прочитать имена следующих файлов:',
-#         'Список файлов плотностью 80 г/м2:',
-#         'Внимание, присутствуют файлы Raflatak:'
-#     ]
-
-    # for i, lst in enumerate(args):
-    #     if lst:
-    #         print(phrases[i])
-    #         print(*lst, sep='\n', end='\n\n')
-    #
-    # if all(map(lambda lst: not bool(lst), args)):
-    #     print('Всё Ок!\n')
 
 
 if __name__ == '__main__':
