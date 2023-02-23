@@ -1,6 +1,7 @@
 ﻿import re
 import os
 import patterns
+from pretty_info import SborkaInfo
 
 
 def main():
@@ -11,7 +12,7 @@ def main():
         \n - [2] проверяем партию сборок.\n''')
 
         if int(ans) == 1:
-            path = input(f'{"*" * 55}\nУкажите путь к файлам тонкой сборки:\n')
+            path = input('Укажите путь к файлам тонкой сборки:\n')
             sborka_checker(path)
 
         elif int(ans) == 2:
@@ -20,9 +21,10 @@ def main():
                 if dir.is_dir() and re.findall(patterns.right_sborka_name_pattern, dir.name):
                     sborka_checker(dir.path)
                 elif dir.is_dir() and not re.findall(patterns.right_sborka_name_pattern, dir.name):
-                    print(f'Не понимаю имя сборки - {dir.name}')
+                    SborkaInfo.print_incorrect_name(dir.name)
+                    # print(f'Не понимаю имя сборки - {dir.name}\n')
 
-        ans_1 = int(input('Желаете продолжить? [1 - Yes; 2 - No]:\n'))
+        ans_1 = int(input('\nЖелаете продолжить? [1 - Yes; 2 - No]:\n'))
         if int(ans_1) == 1:
             continue
         else:
@@ -60,10 +62,17 @@ def sborka_checker(path: str) -> None:
         if filename_is_raflatak(sborkas_name, filename):
             raflatak_files.append(filename)
 
-    print(f'\nИмя сборки - {sborkas_name}')
-    print(f'Плотность сборки - {sborkas_density} г/м2', end='\n\n')
+    SborkaInfo.print_info(name=sborkas_name,
+                          density=sborkas_density,
+                          ofset_files=ofset_files,
+                          denser_files=denser_files,
+                          raflatak_files=raflatak_files,
+                          incorrect_files=incorrect_files)
 
-    print_info(denser_files, incorrect_files, ofset_files, raflatak_files)
+    # print(f'\nИмя сборки - {sborkas_name}')
+    # print(f'Плотность сборки - {sborkas_density} г/м2', end='\n\n')
+    #
+    # print_info(denser_files, incorrect_files, ofset_files, raflatak_files)
 
 
 def get_sborkas_density(sborkas_name: str) -> int:
@@ -115,21 +124,21 @@ def filename_is_raflatak(sborkas_name: str, filename: str) -> bool:
     return False
 
 
-def print_info(*args: list) -> None:
-    phrases = [
-        'Список более плотных макетов:',
-        'Не могу прочитать имена следующих файлов:',
-        'Список файлов плотностью 80 г/м2:',
-        'Внимание, присутствуют файлы Raflatak:'
-    ]
+# def print_info(*args: list) -> None:
+#     phrases = [
+#         'Список более плотных макетов:',
+#         'Не могу прочитать имена следующих файлов:',
+#         'Список файлов плотностью 80 г/м2:',
+#         'Внимание, присутствуют файлы Raflatak:'
+#     ]
 
-    for i, lst in enumerate(args):
-        if lst:
-            print(phrases[i])
-            print(*lst, sep='\n', end='\n\n')
-
-    if all(map(lambda lst: not bool(lst), args)):
-        print('Всё Ок!\n')
+    # for i, lst in enumerate(args):
+    #     if lst:
+    #         print(phrases[i])
+    #         print(*lst, sep='\n', end='\n\n')
+    #
+    # if all(map(lambda lst: not bool(lst), args)):
+    #     print('Всё Ок!\n')
 
 
 if __name__ == '__main__':
